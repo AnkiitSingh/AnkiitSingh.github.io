@@ -1,7 +1,8 @@
-window.onload = function() {
-    const Link = ReactRouterDOM.Link;
+const Link = ReactRouterDOM.Link;
 const Route = ReactRouterDOM.Route;
-  
+const {useState, useEffect} = React
+const axios = axios
+
 const App = () => (
     <ReactRouterDOM.HashRouter>
         <ul>
@@ -16,9 +17,28 @@ const App = () => (
     </ReactRouterDOM.HashRouter>
     )
   
-    const Home = () => <h1>{"Home"}</h1>
+    const Home = () => {
+        const [num, setNum] = useState(0)
+        const [data, setData] = useState([])
+
+        useEffect (() => {
+            axios('https://catfact.ninja/fact')
+            .then((res) => setData(res.data))
+        }, [])
+
+        const increment = () => {
+            setNum(num+1)
+        }
+
+        return(
+            <>
+            <h3>{JSON.stringify(data)}</h3>
+            <button onClick={increment}>Increase</button>
+            <h3>{JSON.stringify(num)}</h3>
+            </>
+        )
+    }
     const Login = () => <h1>{"Login"}</h1>
     const Register = () => <h1>{"Register"}</h1>
   
 ReactDOM.render(<App />, document.querySelector('#root'));
-  };
